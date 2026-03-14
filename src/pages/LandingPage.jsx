@@ -149,7 +149,7 @@ export default function LandingPage() {
   const { session } = useAuth()
 
   // Already logged in → go straight to app
-  useEffect(() => { if (session) navigate('/app') }, [session, navigate])
+  // Auto-redirect removed — let user choose to enter app
 
   const goAuth = () => navigate('/auth')
 
