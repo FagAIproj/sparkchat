@@ -26,11 +26,19 @@ export default function AppPage() {
 
   // When a conversation is opened from FriendsPanel
   const handleOpenChat = async (conv) => {
+    if (!conv) return
     // Enrich with other_user if missing
     let fullConv = conv
     if (!conv.other_user) {
       const found = conversations.find(c => c.id === conv.id)
       fullConv = found ?? conv
+    }
+    // Guard: don't open if we still have no other_user data
+    if (!fullConv.other_user) {
+      // Wait for conversations to load and retry once
+      await new Promise(r => setTimeout(r, 600))
+      const found = conversations.find(c => c.id === conv.id)
+      if (found?.other_user) fullConv = found
     }
     setActiveConv(fullConv)
     setView('chats')
